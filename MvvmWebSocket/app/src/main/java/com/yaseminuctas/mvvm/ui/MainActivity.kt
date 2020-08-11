@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yaseminuctas.mvvm.R
+import com.yaseminuctas.mvvm.data.network.Api
 import com.yaseminuctas.mvvm.data.network.Datum
 import com.yaseminuctas.mvvm.data.repositories.MainViewModelFactory
+import com.yaseminuctas.mvvm.data.repositories.Repository
 import com.yaseminuctas.mvvm.databinding.ActivityMainBinding
 import com.yaseminuctas.mvvm.util.BaseActivity
 import com.yaseminuctas.mvvm.util.Const
@@ -41,12 +43,15 @@ class MainActivity : BaseActivity() {
                 R.layout.activity_main
             )
 
+        val api = Api()
+        val repository = Repository(api)
+
         toolbar.title = Const.USER_NAME
         setSupportActionBar(binding.toolbar)
 
 
         factory =
-            MainViewModelFactory()
+            MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
         binding.viewModel = viewModel
         viewModel.getData()

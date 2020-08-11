@@ -2,6 +2,7 @@ package com.yaseminuctas.mvvm.ui
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,8 +11,11 @@ import com.yaseminuctas.mvvm.util.WebSocketInterface
 import com.yaseminuctas.mvvm.data.model.MockData
 import com.yaseminuctas.mvvm.data.network.ApiClient
 import com.yaseminuctas.mvvm.data.network.Datum
+import com.yaseminuctas.mvvm.data.repositories.Repository
 import com.yaseminuctas.mvvm.util.CommandTypes
 import com.yaseminuctas.mvvm.util.Const
+import com.yaseminuctas.mvvm.util.Coroutines
+import kotlinx.coroutines.Job
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -21,10 +25,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class MainViewModel : ViewModel(), WebSocketInterface {
+class MainViewModel(private val repository: Repository) : ViewModel(), WebSocketInterface {
 
     var firstSideInt: Int = 0
     lateinit var secondSideStr: String
+
+    private lateinit var job: Job
 
     val liveData: MutableLiveData<MockData> = MutableLiveData()
     private val _datumList = MutableLiveData<List<Datum>>()
@@ -81,6 +87,28 @@ class MainViewModel : ViewModel(), WebSocketInterface {
 
 
     fun getData() {
+        job = Coroutines.ioThenMain(
+            { repository.getMockData() },
+            {
+                it?.let {
+                    if (it.data != null) {
+                       liveData.postValue(it)
+
+                        for (i in it?.data!!) {
+                            dataList.add(i)
+                            _datumList.value = dataList
+                        }
+
+                    }
+
+                }
+
+
+            }
+        )
+    }
+
+    /*fun getData() {
         ApiClient.getApiService(null).getData().enqueue(object : Callback<MockData> {
             override fun onFailure(call: Call<MockData>, t: Throwable) {
                 liveData.postValue(null)
@@ -94,7 +122,7 @@ class MainViewModel : ViewModel(), WebSocketInterface {
                 }
             }
         })
-    }
+    } */
 
 
     override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {

@@ -10,7 +10,8 @@
     </data>
 
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,39 +20,57 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            app:titleTextColor="@color/colorWhite"
-            android:gravity="center"
             android:background="@color/colorOrange"
-            />
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleTextColor="@color/colorWhite" />
 
 
         <EditText
             android:id="@+id/edt_text"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
             android:text="@{viewModel.text}"
-            android:layout_below="@+id/toolbar"
-            android:layout_margin="15dp"
-            app:addTextChangedListener="@{viewModel.textWatcher}"/>
+            app:addTextChangedListener="@{viewModel.textWatcher}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <Button
             android:id="@+id/btn_send"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_below="@+id/toolbar"
-            android:layout_toRightOf="@+id/edt_text"
-            android:layout_margin="15dp"
-            android:text="SEND"
-            android:onClick="@{() -> viewModel.save()}"/>
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:onClick="@{() -> viewModel.save()}"
+            android:text="@string/send"
+            app:layout_constraintLeft_toRightOf="@+id/edt_text"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edt_text"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
             android:background="@color/colorGray"
-            android:layout_margin="15dp"/>
-    </RelativeLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_text" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </layout>
