@@ -9,13 +9,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yaseminuctas.mvvm.util.WebSocketInterface
 import com.yaseminuctas.mvvm.data.model.MockData
+import com.yaseminuctas.mvvm.data.network.Api
 import com.yaseminuctas.mvvm.data.network.ApiClient
 import com.yaseminuctas.mvvm.data.network.Datum
 import com.yaseminuctas.mvvm.data.repositories.Repository
 import com.yaseminuctas.mvvm.util.CommandTypes
 import com.yaseminuctas.mvvm.util.Const
 import com.yaseminuctas.mvvm.util.Coroutines
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -87,25 +91,21 @@ class MainViewModel(private val repository: Repository) : ViewModel(), WebSocket
 
 
     fun getData() {
-        job = Coroutines.ioThenMain(
-            { repository.getMockData() },
-            {
-                it?.let {
-                    if (it.data != null) {
-                       liveData.postValue(it)
 
-                        for (i in it?.data!!) {
-                            dataList.add(i)
-                            _datumList.value = dataList
-                        }
+        GlobalScope.launch(Dispatchers.Main) {
+            val service = Api.invoke()
+            val response = service.getData().await()
 
-                    }
+            if (response.isSuccessful) {
+                liveData.postValue(response.body())
 
+                for (i in response.body()?.data!!) {
+                    dataList.add(i)
+                    _datumList.value = dataList
                 }
-
-
             }
-        )
+        }
+
     }
 
     /*fun getData() {

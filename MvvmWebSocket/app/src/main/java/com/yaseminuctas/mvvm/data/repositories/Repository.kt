@@ -6,7 +6,7 @@ class Repository(
     private val api: Api
 ) : SafeApiRequest() {
 
- //   suspend fun getMockData(): List<Datum> = apiRequest { api.getMockData() }
+ // suspend fun getMockData() = apiRequest { api.getData() }
 
 
 

@@ -1,21 +1,28 @@
 package com.yaseminuctas.mvvm.data.network
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import retrofit2.http.GET
+import com.yaseminuctas.mvvm.data.model.MockData
 import com.yaseminuctas.mvvm.util.Const
-import okhttp3.OkHttpClient
+import com.yaseminuctas.mvvm.util.Const.BASE_URL
+import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
-import com.google.gson.GsonBuilder
-import com.google.gson.Gson
-import com.yaseminuctas.mvvm.data.model.MockData
-import retrofit2.Call
 
 
 interface Api {
 
     @GET("emredirican/mock-api/db")
-    fun getData(): Call<MockData>
+    fun getData(): Deferred<Response<MockData>>
 
-
+    companion object{
+        operator fun invoke() : Api {
+            return Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                .baseUrl(Const.BASE_URL)
+                .build()
+                .create(Api::class.java)
+        }
+    }
 }
