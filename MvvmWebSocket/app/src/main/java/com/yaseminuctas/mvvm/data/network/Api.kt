@@ -3,7 +3,6 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import retrofit2.http.GET
 import com.yaseminuctas.mvvm.data.model.MockData
 import com.yaseminuctas.mvvm.util.Const
-import com.yaseminuctas.mvvm.util.Const.BASE_URL
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.Retrofit

@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.yaseminuctas.mvvm.ui.MainViewModel" />
+            type="com.yaseminuctas.mvvm.ui.main.MainViewModel" />
     </data>
 
 
